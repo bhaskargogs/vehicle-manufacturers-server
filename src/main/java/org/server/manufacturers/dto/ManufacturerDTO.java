@@ -40,7 +40,7 @@ public class ManufacturerDTO {
     private String mfrName;
 
     @NotNull(message = "Manufacturer ID cannot be null")
-    private Long mfrID;
+    private Long mfrId;
 
     private List<VehicleTypes> vehicleTypes;
 }

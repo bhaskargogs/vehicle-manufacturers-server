@@ -63,7 +63,7 @@ public class ManufacturerServiceTest {
 
         assertThat(newManufacturerDTO.getMfrCommonName()).isEqualTo("toyota");
         assertThat(newManufacturerDTO.getCountry()).isEqualTo("Japan");
-        assertThat(newManufacturerDTO.getMfrID()).isEqualTo(1057L);
+        assertThat(newManufacturerDTO.getMfrId()).isEqualTo(1057L);
         assertThat(newManufacturerDTO.getMfrName()).isEqualTo("Toyota Motor Corporation");
         assertThat(newManufacturerDTO.getVehicleTypes()).isEmpty();
     }
