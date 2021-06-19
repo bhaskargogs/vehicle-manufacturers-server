@@ -21,6 +21,7 @@ import org.modelmapper.ModelMapper;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.Manufacturer;
+import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
@@ -55,7 +56,8 @@ public class ManufacturerService {
         try {
             manufacturerDTOS.forEach(manufacturerDTO -> {
                 Manufacturer newManufacturer = new Manufacturer(manufacturerDTO.getCountry(), manufacturerDTO.getMfrCommonName(),
-                        manufacturerDTO.getMfrName(), manufacturerDTO.getMfrId(), manufacturerDTO.getVehicleTypes());
+                        manufacturerDTO.getMfrName(), manufacturerDTO.getMfrId(), manufacturerDTO.getVehicleTypes()
+                        .stream().map(vehicleTypesDTO -> mapper.map(vehicleTypesDTO, VehicleTypes.class)).collect(Collectors.toList()));
                 newManufacturer.setCreatedDate(OffsetDateTime.now());
                 newManufacturer.setUpdatedDate(OffsetDateTime.now());
                 manufacturerRepository.save(newManufacturer);
@@ -76,7 +78,8 @@ public class ManufacturerService {
                 throw new NotFoundException();
             }
             Manufacturer manufacturerToUpdate = new Manufacturer(id, updateManufacturerDTORequest.getCountry(), updateManufacturerDTORequest.getMfrCommonName(),
-                    updateManufacturerDTORequest.getMfrName(), updateManufacturerDTORequest.getMfrId(), updateManufacturerDTORequest.getVehicleTypes());
+                    updateManufacturerDTORequest.getMfrName(), updateManufacturerDTORequest.getMfrId(), updateManufacturerDTORequest.getVehicleTypes().stream()
+                    .map(vehicleTypesDTO -> mapper.map(vehicleTypesDTO, VehicleTypes.class)).collect(Collectors.toList()));
             manufacturerToUpdate.setCreatedDate(foundManufacturer.get().getCreatedDate());
             manufacturerToUpdate.setUpdatedDate(OffsetDateTime.now());
             manufacturerRepository.save(manufacturerToUpdate);

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
-import org.server.manufacturers.entity.VehicleTypes;
+import org.server.manufacturers.dto.VehicleTypesDTO;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.service.ManufacturerService;
@@ -58,7 +58,7 @@ public class ManufacturersControllerTest {
     public void findManufacturer_ReturnsManufacturerDetails() throws Exception {
         given(manufacturerService.findById(1L))
                 .willReturn(new ManufacturerDTO("Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                        Collections.singletonList(new VehicleTypes(true, "Passenger Car"))));
+                        Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car"))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/1")
                 .accept(MediaType.APPLICATION_JSON)
@@ -66,7 +66,7 @@ public class ManufacturersControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("country").value("Japan"))
                 .andExpect(jsonPath("mfrCommonName").value("Mazda"))
-                .andExpect(jsonPath("mfrID").value(1041L))
+                .andExpect(jsonPath("mfrId").value(1041L))
                 .andExpect(jsonPath("mfrName").value("Mazda Motor Corporation"))
                 .andExpect(jsonPath("vehicleTypes").isArray())
                 .andExpect(jsonPath("$.vehicleTypes[0].name").value("Passenger Car"))
@@ -86,7 +86,7 @@ public class ManufacturersControllerTest {
     @Test
     public void createManufacturer_ReturnsSuccessMessage() throws Exception {
         ManufacturerDTO manufacturerDTO = new ManufacturerDTO("Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
 
         given(manufacturerService.create(anyList())).willReturn("Successfully Created");
 
@@ -112,9 +112,9 @@ public class ManufacturersControllerTest {
     @Test
     public void createManufacturers_ReturnsSuccessfulLoadedMessage() throws Exception {
         ManufacturerDTO manufacturerDTO = new ManufacturerDTO("Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
         ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motor Corporation", 1095L,
-                Collections.singletonList(new VehicleTypes(false, "Multipurpose Passenger Vehicle (MPV)")));
+                Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
 
         given(manufacturerService.create(anyList())).willReturn("Successfully Loaded Manufacturers");
 
@@ -140,7 +140,7 @@ public class ManufacturersControllerTest {
     @Test
     public void updateManufacturer_ReturnsSuccessMessage() throws Exception {
         UpdateManufacturerDTORequest updatedManufactureDTORequest = new UpdateManufacturerDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
 
         given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufacturerDTORequest.class))).willReturn("Successfully Updated");
 
@@ -155,7 +155,7 @@ public class ManufacturersControllerTest {
     @Test
     public void updateManufacturer_NotFound() throws Exception {
         UpdateManufacturerDTORequest updatedManufactureDTORequest = new UpdateManufacturerDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
 
         given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufacturerDTORequest.class))).willThrow(new NotFoundException());
 
@@ -169,7 +169,7 @@ public class ManufacturersControllerTest {
     @Test
     public void updateManufacturer_InvalidConstraints() throws Exception {
         UpdateManufacturerDTORequest updatedManufactureDTORequest = new UpdateManufacturerDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
 
         given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufacturerDTORequest.class))).willThrow(new InvalidConstraintException());
 
@@ -183,7 +183,7 @@ public class ManufacturersControllerTest {
     @Test
     public void deleteManufacturer_deletesManufacturer() throws Exception {
         ManufacturerDTO manufacturerDTO = new ManufacturerDTO("Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
         willDoNothing().given(manufacturerService).deleteManufacturer(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/manufacturers/1")
@@ -207,9 +207,9 @@ public class ManufacturersControllerTest {
     @Test
     public void findAllManufacturers_ListsManufacturers() throws Exception {
         ManufacturerDTO manufacturerDTO = new ManufacturerDTO("Japan", "Mazda", "Mazda Motor Corporation", 1041L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
         ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motor Corporation", 1095L,
-                Collections.singletonList(new VehicleTypes(false, "Multipurpose Passenger Vehicle (MPV)")));
+                Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
         List<ManufacturerDTO> manufacturers = Arrays.asList(manufacturerDTO, manufacturerDTO2);
 
         given(manufacturerService.findAllManufacturers()).willReturn(manufacturers);
