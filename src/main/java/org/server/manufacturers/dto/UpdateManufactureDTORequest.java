@@ -16,7 +16,6 @@
 
 package org.server.manufacturers.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
