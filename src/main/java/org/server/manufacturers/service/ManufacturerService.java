@@ -19,13 +19,14 @@ package org.server.manufacturers.service;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.server.manufacturers.dto.ManufacturerDTO;
-import org.server.manufacturers.dto.UpdateManufactureDTORequest;
+import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -43,11 +44,13 @@ public class ManufacturerService {
     @Autowired
     private ModelMapper mapper;
 
+    @Transactional
     public ManufacturerDTO findById(Long id) {
         return mapper.map(ManufacturerService.findManufacturerById(manufacturerRepository, id)
                 .orElseThrow(NotFoundException::new), ManufacturerDTO.class);
     }
 
+    @Transactional
     public String create(List<ManufacturerDTO> manufacturerDTOS) {
         try {
             manufacturerDTOS.forEach(manufacturerDTO -> {
@@ -64,15 +67,16 @@ public class ManufacturerService {
         return manufacturerDTOS.size() > 1 ? "Successfully Loaded Manufacturers" : "Successfully Created";
     }
 
-    public String updateManufacturer(Long id, UpdateManufactureDTORequest updateManufactureDTORequest) {
+    @Transactional
+    public String updateManufacturer(Long id, UpdateManufacturerDTORequest updateManufacturerDTORequest) {
         Optional<Manufacturer> foundManufacturer = ManufacturerService.findManufacturerById(manufacturerRepository, id);
 
         try {
             if (foundManufacturer.isEmpty()) {
                 throw new NotFoundException();
             }
-            Manufacturer manufacturerToUpdate = new Manufacturer(id, updateManufactureDTORequest.getCountry(), updateManufactureDTORequest.getMfrCommonName(),
-                    updateManufactureDTORequest.getMfrName(), updateManufactureDTORequest.getMfrID(), updateManufactureDTORequest.getVehicleTypes());
+            Manufacturer manufacturerToUpdate = new Manufacturer(id, updateManufacturerDTORequest.getCountry(), updateManufacturerDTORequest.getMfrCommonName(),
+                    updateManufacturerDTORequest.getMfrName(), updateManufacturerDTORequest.getMfrID(), updateManufacturerDTORequest.getVehicleTypes());
             manufacturerToUpdate.setCreatedDate(foundManufacturer.get().getCreatedDate());
             manufacturerToUpdate.setUpdatedDate(OffsetDateTime.now());
             manufacturerRepository.save(manufacturerToUpdate);
@@ -83,6 +87,7 @@ public class ManufacturerService {
         return "Successfully Updated";
     }
 
+    @Transactional
     public void deleteManufacturer(Long id) {
         if (manufacturerRepository.findById(id).isEmpty()) {
             throw new NotFoundException();
@@ -90,6 +95,7 @@ public class ManufacturerService {
         manufacturerRepository.deleteById(id);
     }
 
+    @Transactional
     public List<ManufacturerDTO> findAllManufacturers() {
         List<Manufacturer> manufacturers = manufacturerRepository.findAll();
         return manufacturers.isEmpty() ? new ArrayList<>() :

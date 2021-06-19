@@ -17,7 +17,7 @@
 package org.server.manufacturers.controller;
 
 import org.server.manufacturers.dto.ManufacturerDTO;
-import org.server.manufacturers.dto.UpdateManufactureDTORequest;
+import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.service.ManufacturerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class ManufacturerController {
     }
 
     @PutMapping("{id}")
-    public String updateManufacturer(@PathVariable Long id, @Valid @RequestBody UpdateManufactureDTORequest updatedManufactureDTORequest) {
+    public String updateManufacturer(@PathVariable Long id, @Valid @RequestBody UpdateManufacturerDTORequest updatedManufactureDTORequest) {
         return manufacturerService.updateManufacturer(id, updatedManufactureDTORequest);
     }
 

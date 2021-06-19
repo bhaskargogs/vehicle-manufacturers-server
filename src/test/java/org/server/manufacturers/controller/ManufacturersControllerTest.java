@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.server.manufacturers.dto.ManufacturerDTO;
-import org.server.manufacturers.dto.UpdateManufactureDTORequest;
+import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
@@ -139,10 +139,10 @@ public class ManufacturersControllerTest {
 
     @Test
     public void updateManufacturer_ReturnsSuccessMessage() throws Exception {
-        UpdateManufactureDTORequest updatedManufactureDTORequest = new UpdateManufactureDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
+        UpdateManufacturerDTORequest updatedManufactureDTORequest = new UpdateManufacturerDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
                 Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
 
-        given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufactureDTORequest.class))).willReturn("Successfully Updated");
+        given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufacturerDTORequest.class))).willReturn("Successfully Updated");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/manufacturers/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -154,10 +154,10 @@ public class ManufacturersControllerTest {
 
     @Test
     public void updateManufacturer_NotFound() throws Exception {
-        UpdateManufactureDTORequest updatedManufactureDTORequest = new UpdateManufactureDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
+        UpdateManufacturerDTORequest updatedManufactureDTORequest = new UpdateManufacturerDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
                 Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
 
-        given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufactureDTORequest.class))).willThrow(new NotFoundException());
+        given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufacturerDTORequest.class))).willThrow(new NotFoundException());
 
         mockMvc.perform(MockMvcRequestBuilders.put("/manufacturers/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -168,10 +168,10 @@ public class ManufacturersControllerTest {
 
     @Test
     public void updateManufacturer_InvalidConstraints() throws Exception {
-        UpdateManufactureDTORequest updatedManufactureDTORequest = new UpdateManufactureDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
+        UpdateManufacturerDTORequest updatedManufactureDTORequest = new UpdateManufacturerDTORequest(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
                 Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
 
-        given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufactureDTORequest.class))).willThrow(new InvalidConstraintException());
+        given(manufacturerService.updateManufacturer(anyLong(), any(UpdateManufacturerDTORequest.class))).willThrow(new InvalidConstraintException());
 
         mockMvc.perform(MockMvcRequestBuilders.put("/manufacturers/1")
                 .contentType(MediaType.APPLICATION_JSON)

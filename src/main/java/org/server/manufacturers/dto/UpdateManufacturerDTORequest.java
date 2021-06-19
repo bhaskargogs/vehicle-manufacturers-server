@@ -27,12 +27,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class UpdateManufactureDTORequest extends ManufacturerDTO {
+public class UpdateManufacturerDTORequest extends ManufacturerDTO {
 
     @NotNull(message = "ID cannot be null")
     private Long id;
 
-    public UpdateManufactureDTORequest(Long id, String country, String mfrCommonName, String mfrName, Long mfrID, List<VehicleTypes> vehicleTypes) {
+    public UpdateManufacturerDTORequest(Long id, String country, String mfrCommonName, String mfrName, Long mfrID, List<VehicleTypes> vehicleTypes) {
         super(country, mfrCommonName, mfrName, mfrID, vehicleTypes);
         this.id = id;
     }

@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.server.manufacturers.dto.ManufacturerDTO;
-import org.server.manufacturers.dto.UpdateManufactureDTORequest;
+import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
@@ -98,7 +98,7 @@ public class ManufacturerServiceTest {
     @Test
     public void updateManufacturer_UpdatesManufacturer() {
         Manufacturer manufacturer = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
-        UpdateManufactureDTORequest updateManufacturerRequest = new UpdateManufactureDTORequest(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
+        UpdateManufacturerDTORequest updateManufacturerRequest = new UpdateManufacturerDTORequest(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
 
         given(manufacturerRepository.findById(anyLong())).willReturn(Optional.of(manufacturer));
         given(manufacturerRepository.save(any(Manufacturer.class))).willReturn(manufacturer);
@@ -109,7 +109,7 @@ public class ManufacturerServiceTest {
 
     @Test
     public void updateManufacturer_NotFound() {
-        UpdateManufactureDTORequest updateManufacturerRequest = new UpdateManufactureDTORequest(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
+        UpdateManufacturerDTORequest updateManufacturerRequest = new UpdateManufacturerDTORequest(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
 
         given(manufacturerRepository.findById(anyLong())).willThrow(new NotFoundException());
 
@@ -119,7 +119,7 @@ public class ManufacturerServiceTest {
     @Test
     public void updateManufacturer_InvalidConstraint() {
         Manufacturer manufacturer = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
-        UpdateManufactureDTORequest updateManufacturerRequest = new UpdateManufactureDTORequest(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
+        UpdateManufacturerDTORequest updateManufacturerRequest = new UpdateManufacturerDTORequest(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
 
         given(manufacturerRepository.findById(anyLong())).willReturn(Optional.of(manufacturer));
         given(manufacturerRepository.save(any(Manufacturer.class))).willThrow(new InvalidConstraintException());
