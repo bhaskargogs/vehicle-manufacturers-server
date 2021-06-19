@@ -25,6 +25,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VehicleTypesDTO {
 
-    private boolean isPrimary;
+    private boolean IsPrimary;
     private String name;
 }
