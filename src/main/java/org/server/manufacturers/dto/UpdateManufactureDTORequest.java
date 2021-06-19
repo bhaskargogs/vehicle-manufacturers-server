@@ -22,13 +22,12 @@ import lombok.NoArgsConstructor;
 import org.server.manufacturers.entity.VehicleTypes;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class UpdateManufactureDTORequest extends ManufacturerDTO implements Serializable {
+public class UpdateManufactureDTORequest extends ManufacturerDTO {
 
     @NotNull(message = "ID cannot be null")
     private Long id;

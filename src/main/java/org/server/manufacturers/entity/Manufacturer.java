@@ -21,13 +21,14 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "manufacturers")
-public class Manufacturer {
+public class Manufacturer implements Serializable {
 
     @Getter
     @Id
