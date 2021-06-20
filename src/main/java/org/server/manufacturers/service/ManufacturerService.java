@@ -48,8 +48,10 @@ public class ManufacturerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ManufacturerDTO findById(Long id) {
-        return mapper.map(ManufacturerService.findManufacturerById(manufacturerRepository, id)
-                .orElseThrow(NotFoundException::new), ManufacturerDTO.class);
+        return ManufacturerDTO.mapManufacturerToManufacturerDTO(
+                ManufacturerService.findManufacturerById(manufacturerRepository, id).orElseThrow(NotFoundException::new));
+//        return mapper.map(ManufacturerService.findManufacturerById(manufacturerRepository, id)
+//                .orElseThrow(NotFoundException::new), ManufacturerDTO.class);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -104,7 +106,7 @@ public class ManufacturerService {
         List<Manufacturer> manufacturers = manufacturerRepository.findAll();
         return manufacturers.isEmpty() ? new ArrayList<>() :
                 manufacturers.stream()
-                        .map(manufacturer -> mapper.map(manufacturer, ManufacturerDTO.class))
+                        .map(ManufacturerDTO::mapManufacturerToManufacturerDTO)
                         .collect(Collectors.toList());
     }
 

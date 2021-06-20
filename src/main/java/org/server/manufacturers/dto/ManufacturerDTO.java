@@ -19,10 +19,12 @@ package org.server.manufacturers.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.VehicleTypes;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -43,4 +45,21 @@ public class ManufacturerDTO {
     private Long mfrId;
 
     private List<VehicleTypesDTO> vehicleTypes;
+
+    public static ManufacturerDTO mapManufacturerToManufacturerDTO(Manufacturer manufacturer) {
+        ManufacturerDTO manufacturerDTO = new ManufacturerDTO();
+        manufacturerDTO.setCountry(manufacturer.getMfrCountry());
+        manufacturerDTO.setMfrCommonName(manufacturer.getMfrCommonName());
+        manufacturerDTO.setMfrId(manufacturer.getMfrID());
+        manufacturerDTO.setMfrName(manufacturer.getMfrName());
+        List<VehicleTypesDTO> vehicleTypesDTOS = new ArrayList<>();
+        manufacturer.getVehicleTypes().forEach(vehicleType -> {
+            VehicleTypesDTO vehicleTypesDTO = new VehicleTypesDTO();
+            vehicleTypesDTO.setIsPrimary(vehicleType.isPrimary());
+            vehicleTypesDTO.setName(vehicleType.getName());
+            vehicleTypesDTOS.add(vehicleTypesDTO);
+        });
+        manufacturerDTO.setVehicleTypes(vehicleTypesDTOS);
+        return manufacturerDTO;
+    }
 }

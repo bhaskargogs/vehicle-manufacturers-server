@@ -57,7 +57,6 @@ public class ManufacturerServiceTest {
     public void getManufacturer_ReturnsManufacturerDetails() {
         Manufacturer manufacturer = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
 
-        given(mapper.map(manufacturer, ManufacturerDTO.class)).willReturn(new ManufacturerDTO("Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>()));
         given(manufacturerRepository.findById(1L)).willReturn(Optional.of(manufacturer));
 
         ManufacturerDTO newManufacturerDTO = manufacturerService.findById(1L);
@@ -153,8 +152,6 @@ public class ManufacturerServiceTest {
         List<ManufacturerDTO> manufacturerDTOs = Arrays.asList(manufacturerDTO1, manufacturerDTO2);
         List<Manufacturer> manufacturers = Arrays.asList(manufacturer1, manufacturer2);
 
-        given(mapper.map(manufacturer1, ManufacturerDTO.class)).willReturn(manufacturerDTO1);
-        given(mapper.map(manufacturer2, ManufacturerDTO.class)).willReturn(manufacturerDTO2);
         given(manufacturerRepository.findAll()).willReturn(manufacturers);
 
         assertThat(manufacturerService.findAllManufacturers()).isEqualTo(manufacturerDTOs);
