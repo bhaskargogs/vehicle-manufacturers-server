@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
+import org.server.manufacturers.dto.VehicleTypesDTO;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
@@ -145,7 +146,7 @@ public class ManufacturerServiceTest {
     @Test
     public void getAllManufacturers_ManufacturersList() {
         ManufacturerDTO manufacturerDTO1 = new ManufacturerDTO("Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
-        ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypes(false, "Multipurpose Passenger Vehicle (MPV)")));
+        ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
         Manufacturer manufacturer1 = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
         Manufacturer manufacturer2 = new Manufacturer(2L, "United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypes(false, "Multipurpose Passenger Vehicle (MPV)")));
 
@@ -169,7 +170,7 @@ public class ManufacturerServiceTest {
     @Test
     public void createManufacturers_ReturnManufacturersLoadedMessage() {
         ManufacturerDTO manufacturerDTO1 = new ManufacturerDTO("Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
-        ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypes(false, "Multipurpose Passenger Vehicle (MPV)")));
+        ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
         Manufacturer manufacturer1 = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
         Manufacturer manufacturer2 = new Manufacturer(2L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
 

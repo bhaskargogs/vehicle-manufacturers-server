@@ -16,24 +16,15 @@
 
 package org.server.manufacturers.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.server.manufacturers.entity.VehicleTypes;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
-
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class UpdateManufacturerDTORequest extends ManufacturerDTO {
+@AllArgsConstructor
+public class VehicleTypesDTO {
 
-    @NotNull(message = "ID cannot be null")
-    private Long id;
-
-    public UpdateManufacturerDTORequest(Long id, String country, String mfrCommonName, String mfrName, Long mfrID, List<VehicleTypesDTO> vehicleTypes) {
-        super(country, mfrCommonName, mfrName, mfrID, vehicleTypes);
-        this.id = id;
-    }
+    private boolean IsPrimary;
+    private String name;
 }

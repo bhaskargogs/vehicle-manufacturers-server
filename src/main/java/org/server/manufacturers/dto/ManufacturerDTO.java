@@ -42,5 +42,5 @@ public class ManufacturerDTO {
     @NotNull(message = "Manufacturer ID cannot be null")
     private Long mfrId;
 
-    private List<VehicleTypes> vehicleTypes;
+    private List<VehicleTypesDTO> vehicleTypes;
 }
