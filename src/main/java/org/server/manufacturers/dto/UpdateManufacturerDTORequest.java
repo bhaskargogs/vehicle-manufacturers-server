@@ -32,7 +32,7 @@ public class UpdateManufacturerDTORequest extends ManufacturerDTO {
     @NotNull(message = "ID cannot be null")
     private Long id;
 
-    public UpdateManufacturerDTORequest(Long id, String country, String mfrCommonName, String mfrName, Long mfrID, List<VehicleTypesDTO> vehicleTypes) {
+    public UpdateManufacturerDTORequest(Long id, String country, String mfrCommonName, String mfrName, Long mfrID, List<VehicleTypes> vehicleTypes) {
         super(country, mfrCommonName, mfrName, mfrID, vehicleTypes);
         this.id = id;
     }

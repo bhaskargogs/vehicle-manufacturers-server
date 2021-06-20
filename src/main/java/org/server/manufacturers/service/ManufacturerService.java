@@ -56,8 +56,7 @@ public class ManufacturerService {
         try {
             manufacturerDTOS.forEach(manufacturerDTO -> {
                 Manufacturer newManufacturer = new Manufacturer(manufacturerDTO.getCountry(), manufacturerDTO.getMfrCommonName(),
-                        manufacturerDTO.getMfrName(), manufacturerDTO.getMfrId(), manufacturerDTO.getVehicleTypes()
-                        .stream().map(vehicleTypesDTO -> mapper.map(vehicleTypesDTO, VehicleTypes.class)).collect(Collectors.toList()));
+                        manufacturerDTO.getMfrName(), manufacturerDTO.getMfrId(), manufacturerDTO.getVehicleTypes());
                 newManufacturer.setCreatedDate(OffsetDateTime.now());
                 newManufacturer.setUpdatedDate(OffsetDateTime.now());
                 manufacturerRepository.save(newManufacturer);
@@ -78,8 +77,7 @@ public class ManufacturerService {
                 throw new NotFoundException();
             }
             Manufacturer manufacturerToUpdate = new Manufacturer(id, updateManufacturerDTORequest.getCountry(), updateManufacturerDTORequest.getMfrCommonName(),
-                    updateManufacturerDTORequest.getMfrName(), updateManufacturerDTORequest.getMfrId(), updateManufacturerDTORequest.getVehicleTypes().stream()
-                    .map(vehicleTypesDTO -> mapper.map(vehicleTypesDTO, VehicleTypes.class)).collect(Collectors.toList()));
+                    updateManufacturerDTORequest.getMfrName(), updateManufacturerDTORequest.getMfrId(), updateManufacturerDTORequest.getVehicleTypes());
             manufacturerToUpdate.setCreatedDate(foundManufacturer.get().getCreatedDate());
             manufacturerToUpdate.setUpdatedDate(OffsetDateTime.now());
             manufacturerRepository.save(manufacturerToUpdate);
