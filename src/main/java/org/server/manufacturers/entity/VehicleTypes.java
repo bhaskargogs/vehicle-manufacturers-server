@@ -26,7 +26,7 @@ import java.io.Serializable;
 public class VehicleTypes implements Serializable {
 
     @Getter
-    @Column(name = "primary")
+    @Column(name = "is_primary")
     private boolean IsPrimary;
 
     @Getter
