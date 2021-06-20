@@ -21,7 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.dto.VehicleTypesDTO;
@@ -46,9 +45,6 @@ public class ManufacturerServiceTest {
 
     @Mock
     private ManufacturerRepository manufacturerRepository;
-
-    @Mock
-    private ModelMapper mapper;
 
     @InjectMocks
     private ManufacturerService manufacturerService;

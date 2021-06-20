@@ -17,7 +17,6 @@
 package org.server.manufacturers.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.Manufacturer;
@@ -43,15 +42,11 @@ public class ManufacturerService {
     @Autowired
     private ManufacturerRepository manufacturerRepository;
 
-    @Autowired
-    private ModelMapper mapper;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ManufacturerDTO findById(Long id) {
         return ManufacturerDTO.mapManufacturerToManufacturerDTO(
                 ManufacturerService.findManufacturerById(manufacturerRepository, id).orElseThrow(NotFoundException::new));
-//        return mapper.map(ManufacturerService.findManufacturerById(manufacturerRepository, id)
-//                .orElseThrow(NotFoundException::new), ManufacturerDTO.class);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
