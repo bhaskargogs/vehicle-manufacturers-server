@@ -18,6 +18,7 @@ package org.server.manufacturers.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.VehicleTypes;
@@ -44,8 +45,8 @@ public class ManufacturerService {
 
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ManufacturerDTO findById(Long id) {
-        return ManufacturerDTO.mapManufacturerToManufacturerDTO(
+    public ManufacturerResponse findById(Long id) {
+        return ManufacturerResponse.mapManufacturerToResponse(
                 ManufacturerService.findManufacturerById(manufacturerRepository, id).orElseThrow(NotFoundException::new));
     }
 
@@ -97,11 +98,11 @@ public class ManufacturerService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<ManufacturerDTO> findAllManufacturers() {
+    public List<ManufacturerResponse> findAllManufacturers() {
         List<Manufacturer> manufacturers = manufacturerRepository.findAll();
         return manufacturers.isEmpty() ? new ArrayList<>() :
                 manufacturers.stream()
-                        .map(ManufacturerDTO::mapManufacturerToManufacturerDTO)
+                        .map(ManufacturerResponse::mapManufacturerToResponse)
                         .collect(Collectors.toList());
     }
 

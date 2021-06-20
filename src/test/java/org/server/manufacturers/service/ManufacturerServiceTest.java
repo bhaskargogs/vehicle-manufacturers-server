@@ -22,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.dto.VehicleTypesDTO;
 import org.server.manufacturers.entity.Manufacturer;
@@ -55,7 +56,7 @@ public class ManufacturerServiceTest {
 
         given(manufacturerRepository.findById(1L)).willReturn(Optional.of(manufacturer));
 
-        ManufacturerDTO newManufacturerDTO = manufacturerService.findById(1L);
+        ManufacturerResponse newManufacturerDTO = manufacturerService.findById(1L);
 
         assertThat(newManufacturerDTO.getMfrCommonName()).isEqualTo("toyota");
         assertThat(newManufacturerDTO.getCountry()).isEqualTo("Japan");
@@ -140,12 +141,12 @@ public class ManufacturerServiceTest {
 
     @Test
     public void getAllManufacturers_ManufacturersList() {
-        ManufacturerDTO manufacturerDTO1 = new ManufacturerDTO("Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
-        ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
+        ManufacturerResponse manufacturerDTO1 = new ManufacturerResponse(1L,"Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
+        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(2L,"United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
         Manufacturer manufacturer1 = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
         Manufacturer manufacturer2 = new Manufacturer(2L, "United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypes(false, "Multipurpose Passenger Vehicle (MPV)")));
 
-        List<ManufacturerDTO> manufacturerDTOs = Arrays.asList(manufacturerDTO1, manufacturerDTO2);
+        List<ManufacturerResponse> manufacturerDTOs = Arrays.asList(manufacturerDTO1, manufacturerDTO2);
         List<Manufacturer> manufacturers = Arrays.asList(manufacturer1, manufacturer2);
 
         given(manufacturerRepository.findAll()).willReturn(manufacturers);

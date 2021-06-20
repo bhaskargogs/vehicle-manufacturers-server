@@ -17,6 +17,7 @@
 package org.server.manufacturers.controller;
 
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.service.ManufacturerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ManufacturerController {
     private ManufacturerService manufacturerService;
 
     @GetMapping("{id}")
-    public ManufacturerDTO findManufacturer(@PathVariable Long id) {
+    public ManufacturerResponse findManufacturer(@PathVariable Long id) {
         return manufacturerService.findById(id);
     }
 
@@ -56,7 +57,7 @@ public class ManufacturerController {
     }
 
     @GetMapping
-    public List<ManufacturerDTO> findAllManufacturers() {
+    public List<ManufacturerResponse> findAllManufacturers() {
         return manufacturerService.findAllManufacturers();
     }
 

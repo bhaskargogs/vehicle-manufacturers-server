@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.dto.VehicleTypesDTO;
 import org.server.manufacturers.entity.VehicleTypes;
@@ -58,7 +59,7 @@ public class ManufacturersControllerTest {
     @Test
     public void findManufacturer_ReturnsManufacturerDetails() throws Exception {
         given(manufacturerService.findById(1L))
-                .willReturn(new ManufacturerDTO("Japan", "Mazda", "Mazda Motor Corporation", 1041L,
+                .willReturn(new ManufacturerResponse(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
                         Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car"))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/1")
@@ -207,11 +208,11 @@ public class ManufacturersControllerTest {
 
     @Test
     public void findAllManufacturers_ListsManufacturers() throws Exception {
-        ManufacturerDTO manufacturerDTO = new ManufacturerDTO("Japan", "Mazda", "Mazda Motor Corporation", 1041L,
+        ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
                 Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
-        ManufacturerDTO manufacturerDTO2 = new ManufacturerDTO("United States (USA)", "Ford", "Ford Motor Corporation", 1095L,
+        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(2L, "United States (USA)", "Ford", "Ford Motor Corporation", 1095L,
                 Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
-        List<ManufacturerDTO> manufacturers = Arrays.asList(manufacturerDTO, manufacturerDTO2);
+        List<ManufacturerResponse> manufacturers = Arrays.asList(manufacturerDTO, manufacturerDTO2);
 
         given(manufacturerService.findAllManufacturers()).willReturn(manufacturers);
 
