@@ -35,8 +35,8 @@ public class VehicleTypes implements Serializable {
 
     private VehicleTypes(){}
 
-    public VehicleTypes(boolean IsPrimary, String name) {
-        this.IsPrimary = IsPrimary;
+    public VehicleTypes(boolean isPrimary, String name) {
+        IsPrimary = isPrimary;
         this.name = name;
     }
 }
