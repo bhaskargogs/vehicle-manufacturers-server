@@ -27,7 +27,7 @@ public class VehicleTypes implements Serializable {
 
     @Getter
     @Column(name = "is_primary")
-    private boolean isPrimary;
+    private Boolean isPrimary;
 
     @Getter
     @Column(name = "vehicle_type_name")
@@ -35,7 +35,7 @@ public class VehicleTypes implements Serializable {
 
     private VehicleTypes(){}
 
-    public VehicleTypes(boolean isPrimary, String name) {
+    public VehicleTypes(Boolean isPrimary, String name) {
         this.isPrimary = isPrimary;
         this.name = name;
     }
