@@ -26,16 +26,17 @@ import java.io.Serializable;
 public class VehicleTypes implements Serializable {
 
     @Getter
-    @Column(name = "is_primary")
-    private Boolean isPrimary;
+    @Column(name = "is_primary", columnDefinition = "boolean default true")
+    private boolean isPrimary;
 
     @Getter
     @Column(name = "vehicle_type_name")
     private String name;
 
-    private VehicleTypes(){}
+    private VehicleTypes() {
+    }
 
-    public VehicleTypes(Boolean isPrimary, String name) {
+    public VehicleTypes(boolean isPrimary, String name) {
         this.isPrimary = isPrimary;
         this.name = name;
     }
