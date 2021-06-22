@@ -45,11 +45,34 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     annotationProcessor 'org.hibernate:hibernate-jpamodelgen:5.5.0.Final'
     compileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+    testImplementation 'com.konghq:unirest-java:3.8.00'
+    testImplementation 'io.cucumber:cucumber-java:6.1.2'
+    testImplementation 'io.cucumber:cucumber-junit:6.1.2'
+    testImplementation 'io.cucumber:cucumber-core:6.1.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events = ["passed", "skipped", "failed"]
+        showStandardStreams = true
+    }
+    reports {
+        html.enabled = true
+    }
+
+    exclude 'org/server/manufacturers/cucumber'
 }
+
+//cucumber {
+//    glue = 'classpath:org.server.manufacturers.cucumber'
+//    //dryRun = 'false'
+//    plugin = ['pretty']
+//    featurePath = 'classpath:features'
+//    main = 'io.cucumber.core.cli.Main'
+//}

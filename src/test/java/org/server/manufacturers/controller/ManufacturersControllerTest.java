@@ -19,10 +19,7 @@ package org.server.manufacturers.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.server.manufacturers.dto.ManufacturerDTO;
-import org.server.manufacturers.dto.ManufacturerResponse;
-import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
-import org.server.manufacturers.dto.VehicleTypesDTO;
+import org.server.manufacturers.dto.*;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.service.ManufacturerService;
@@ -205,7 +202,7 @@ public class ManufacturersControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
+/*    @Test
     public void findAllManufacturers_ListsManufacturers() throws Exception {
         ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
                 Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
@@ -223,9 +220,36 @@ public class ManufacturersControllerTest {
                 .andExpect(jsonPath("$[0].mfrCommonName").value("Mazda"))
                 .andExpect(jsonPath("$[1].country").value("United States (USA)"))
                 .andExpect(jsonPath("$[1].mfrCommonName").value("Ford"));
-    }
+    }*/
 
     @Test
+    public void findAllManufacturersPaging_ListsManufacturers() throws Exception {
+        ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
+        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(2L, "United States (USA)", "Ford", "Ford Motor Corporation", 1095L,
+                Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
+        List<ManufacturerResponse> manufacturers = Arrays.asList(manufacturerDTO, manufacturerDTO2);
+        ManufacturersListResponse manufacturersListResponse = new ManufacturersListResponse(manufacturers, (long) manufacturers.size());
+
+        given(manufacturerService.findManufacturers(0, 20, "asc", "id")).willReturn(manufacturersListResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers")
+                .param("pageNo", "0")
+                .param("pageSize", "20")
+                .param("direction", "asc")
+                .param("field", "id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("manufacturers").isArray())
+                .andExpect(jsonPath("$.manufacturers[0].country").value("Japan"))
+                .andExpect(jsonPath("$.manufacturers[0].mfrCommonName").value("Mazda"))
+                .andExpect(jsonPath("$.manufacturers[1].country").value("United States (USA)"))
+                .andExpect(jsonPath("$.manufacturers[1].mfrCommonName").value("Ford"))
+                .andExpect(jsonPath("totalManufacturers").value(2L));
+    }
+
+/*    @Test
     public void findAllManufacturers_EmptyList() throws Exception {
         given(manufacturerService.findAllManufacturers()).willReturn(new ArrayList<>());
 
@@ -234,7 +258,7 @@ public class ManufacturersControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("[]"));
-    }
+    }*/
 
     @Test
     public void searchManufacturers_ReturnsManufacturers() throws Exception {
@@ -254,7 +278,8 @@ public class ManufacturersControllerTest {
                 .andExpect(jsonPath("$[0].country").value("GERMANY"))
                 .andExpect(jsonPath("$[0].mfrName").value("BMW AG"))
                 .andExpect(jsonPath("$[1].country").value("GERMANY"))
-                .andExpect(jsonPath("$[1].mfrName").value("BMW M GMBH"));;
+                .andExpect(jsonPath("$[1].mfrName").value("BMW M GMBH"));
+        ;
     }
 
     @Test
