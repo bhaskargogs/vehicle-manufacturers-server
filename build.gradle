@@ -47,6 +47,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.testcontainers:postgresql:1.15.0'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
     testImplementation 'com.konghq:unirest-java:3.8.00'
