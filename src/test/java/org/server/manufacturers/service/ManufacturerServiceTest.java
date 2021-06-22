@@ -40,8 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ManufacturerServiceTest {
@@ -51,6 +50,9 @@ public class ManufacturerServiceTest {
 
     @InjectMocks
     private ManufacturerService manufacturerService;
+
+    @Mock
+    private CommonSpecifications commonSpecifications;
 
     @Test
     public void getManufacturer_ReturnsManufacturerDetails() {
@@ -161,25 +163,6 @@ public class ManufacturerServiceTest {
         given(manufacturerRepository.findAll()).willReturn(new ArrayList<>());
 
         assertThat(manufacturerService.findAllManufacturers()).isEmpty();
-    }
-
-    @Test
-    public void searchManufacturers_ReturnsManufacturers() {
-        ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW AG", 966L, null);
-        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW M GMBH", 967L,
-                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
-        Manufacturer manufacturer = new Manufacturer(1L, "GERMANY", "BMW", "BMW AG", 966L, null);
-        Manufacturer manufacturer2 = new Manufacturer(1L, "GERMANY", "BMW", "BMW M GMBH", 967L,
-                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
-
-        List<ManufacturerResponse> manufacturerDTOs = Arrays.asList(manufacturerDTO, manufacturerDTO2);
-        List<Manufacturer> manufacturers = Arrays.asList(manufacturer, manufacturer2);
-
-        Specification<Manufacturer> specs = Specification.where(CommonSpecifications.mfrNameLike("bmw"));
-
-        given(manufacturerRepository.findAll(specs)).willReturn(manufacturers);
-
-        assertThat(manufacturerService.searchManufacturers("bmw")).isEqualTo(manufacturerDTOs);
     }
 
     @Test
