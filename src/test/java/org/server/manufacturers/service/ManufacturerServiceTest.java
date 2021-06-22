@@ -16,11 +16,14 @@
 
 package org.server.manufacturers.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
@@ -43,16 +46,21 @@ import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+//@MockitoSettings(strictness = Strictness.LENIENT)
 public class ManufacturerServiceTest {
 
     @Mock
     private ManufacturerRepository manufacturerRepository;
 
-    @InjectMocks
     private ManufacturerService manufacturerService;
 
     @Mock
     private CommonSpecifications commonSpecifications;
+
+    @BeforeEach
+    public void setUp() {
+        manufacturerService = new ManufacturerService(manufacturerRepository, commonSpecifications);
+    }
 
     @Test
     public void getManufacturer_ReturnsManufacturerDetails() {
@@ -164,26 +172,7 @@ public class ManufacturerServiceTest {
 
         assertThat(manufacturerService.findAllManufacturers()).isEmpty();
     }
-
-//    @Test
-//    public void searchManufacturers_ReturnsManufacturers() {
-//        ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW AG", 966L, null);
-//        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW M GMBH", 967L,
-//                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
-//        Manufacturer manufacturer = new Manufacturer(1L, "GERMANY", "BMW", "BMW AG", 966L, null);
-//        Manufacturer manufacturer2 = new Manufacturer(1L, "GERMANY", "BMW", "BMW M GMBH", 967L,
-//                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
-//
-//        List<ManufacturerResponse> manufacturerDTOs = Arrays.asList(manufacturerDTO, manufacturerDTO2);
-//        List<Manufacturer> manufacturers = Arrays.asList(manufacturer, manufacturer2);
-//
-//        Specification<Manufacturer> specs = Specification.where(commonSpecifications.mfrCommonNameLike("bmw"));
-//        lenient().doReturn(manufacturers).when(manufacturerRepository).findAll(specs);
-////        given(commonSpecifications.mfrCommonNameLike("bmw")).willReturn(specs);
-////        given(manufacturerRepository.findAll(specs)).willReturn(manufacturers);
-//        System.out.println(manufacturerService.searchManufacturers("bmw"));
-////        assertThat(manufacturerService.searchManufacturers("bmw")).isEqualTo(manufacturerDTOs);
-//    }
+    
 
     @Test
     public void createManufacturers_ReturnManufacturersLoadedMessage() {

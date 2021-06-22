@@ -16,6 +16,7 @@
 
 package org.server.manufacturers.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.ManufacturerResponse;
@@ -40,13 +41,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ManufacturerService {
 
-    @Autowired
-    private ManufacturerRepository manufacturerRepository;
-
-    @Autowired
-    private CommonSpecifications commonSpecifications;
+    private final ManufacturerRepository manufacturerRepository;
+    private final CommonSpecifications commonSpecifications;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ManufacturerResponse findById(Long id) {
@@ -114,6 +113,7 @@ public class ManufacturerService {
         return repository.findById(id);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> searchManufacturers(String searchParam) {
         Specification<Manufacturer> specs = (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) ?
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
@@ -124,19 +124,6 @@ public class ManufacturerService {
                                 .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
                                 .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
                                 .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase()));
-
-        /*        if (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) {
-            specs = Specification.where(CommonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam)));
-        } else if (searchParam.matches("^[0-9]$")) {
-            specs = Specification.where(CommonSpecifications.mfrIdLike(searchParam)
-                    .or(CommonSpecifications.idLike(searchParam))
-                    .or(CommonSpecifications.mfrCountryLike(searchParam))
-                    .or(CommonSpecifications.mfrCommonNameLike(searchParam))
-                    .or(CommonSpecifications.mfrNameLike(searchParam))
-                    .or(CommonSpecifications.mfrIdLike(searchParam))
-                    .or(CommonSpecifications.hasVehicleTypeName(searchParam))
-            );
-        }*/
 
         List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs);
 

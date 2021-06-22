@@ -23,6 +23,7 @@ import org.server.manufacturers.entity.Manufacturer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -42,13 +43,14 @@ public class ManufacturerResponse {
         manufacturerResponse.setMfrCommonName(manufacturer.getMfrCommonName());
         manufacturerResponse.setMfrId(manufacturer.getMfrID());
         manufacturerResponse.setMfrName(manufacturer.getMfrName());
-        List<VehicleTypesDTO> vehicleTypesDTOS = new ArrayList<>();
-        manufacturer.getVehicleTypes().forEach(vehicleType -> {
-            VehicleTypesDTO vehicleTypesDTO = new VehicleTypesDTO();
-            vehicleTypesDTO.setIsPrimary(vehicleType.isPrimary());
-            vehicleTypesDTO.setName(vehicleType.getName());
-            vehicleTypesDTOS.add(vehicleTypesDTO);
-        });
+        List<VehicleTypesDTO> vehicleTypesDTOS = (manufacturer.getVehicleTypes().isEmpty()) ?
+                new ArrayList<>() :
+                (manufacturer.getVehicleTypes().stream().map(vehicleType -> {
+                    VehicleTypesDTO vehicleTypesDTO = new VehicleTypesDTO();
+                    vehicleTypesDTO.setIsPrimary(vehicleType.isPrimary());
+                    vehicleTypesDTO.setName(vehicleType.getName());
+                    return vehicleTypesDTO;
+                }).collect(Collectors.toList()));
         manufacturerResponse.setVehicleTypes(vehicleTypesDTOS);
         return manufacturerResponse;
     }
