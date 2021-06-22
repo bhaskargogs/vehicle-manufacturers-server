@@ -51,9 +51,6 @@ public class ManufacturerServiceTest {
     @InjectMocks
     private ManufacturerService manufacturerService;
 
-    @Mock
-    private CommonSpecifications commonSpecifications;
-
     @Test
     public void getManufacturer_ReturnsManufacturerDetails() {
         Manufacturer manufacturer = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
