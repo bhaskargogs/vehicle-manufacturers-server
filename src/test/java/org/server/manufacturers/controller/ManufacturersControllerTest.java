@@ -23,7 +23,6 @@ import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.dto.VehicleTypesDTO;
-import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.service.ManufacturerService;

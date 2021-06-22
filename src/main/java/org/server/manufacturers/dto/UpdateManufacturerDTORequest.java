@@ -19,7 +19,6 @@ package org.server.manufacturers.dto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.server.manufacturers.entity.VehicleTypes;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

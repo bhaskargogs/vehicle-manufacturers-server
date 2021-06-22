@@ -27,7 +27,6 @@ import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
 import org.server.manufacturers.util.CommonSpecifications;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

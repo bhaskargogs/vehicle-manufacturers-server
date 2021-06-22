@@ -19,11 +19,8 @@ package org.server.manufacturers.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
@@ -34,7 +31,6 @@ import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
 import org.server.manufacturers.util.CommonSpecifications;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
 
@@ -43,10 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-//@MockitoSettings(strictness = Strictness.LENIENT)
 public class ManufacturerServiceTest {
 
     @Mock
@@ -172,7 +166,7 @@ public class ManufacturerServiceTest {
 
         assertThat(manufacturerService.findAllManufacturers()).isEmpty();
     }
-    
+
 
     @Test
     public void createManufacturers_ReturnManufacturersLoadedMessage() {
