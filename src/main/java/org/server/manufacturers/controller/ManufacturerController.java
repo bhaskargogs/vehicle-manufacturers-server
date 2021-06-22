@@ -61,4 +61,9 @@ public class ManufacturerController {
         return manufacturerService.findAllManufacturers();
     }
 
+    @GetMapping("/search")
+    public List<ManufacturerResponse> searchManufacturers(@RequestParam("searchParam") String searchParam) {
+        return manufacturerService.searchManufacturers(searchParam);
+    }
+
 }

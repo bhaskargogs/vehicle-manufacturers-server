@@ -30,6 +30,8 @@ import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
+import org.server.manufacturers.util.CommonSpecifications;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
 
@@ -140,7 +142,7 @@ public class ManufacturerServiceTest {
     }
 
     @Test
-    public void getAllManufacturers_ManufacturersList() {
+    public void findAllManufacturers_ReturnsManufacturers() {
         ManufacturerResponse manufacturerDTO1 = new ManufacturerResponse(1L,"Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
         ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(2L,"United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
         Manufacturer manufacturer1 = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
@@ -155,10 +157,29 @@ public class ManufacturerServiceTest {
     }
 
     @Test
-    public void getAllManufacturers_EmptyList() {
+    public void findAllManufacturers_EmptyList() {
         given(manufacturerRepository.findAll()).willReturn(new ArrayList<>());
 
         assertThat(manufacturerService.findAllManufacturers()).isEmpty();
+    }
+
+    @Test
+    public void searchManufacturers_ReturnsManufacturers() {
+        ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW AG", 966L, null);
+        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW M GMBH", 967L,
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
+        Manufacturer manufacturer = new Manufacturer(1L, "GERMANY", "BMW", "BMW AG", 966L, null);
+        Manufacturer manufacturer2 = new Manufacturer(1L, "GERMANY", "BMW", "BMW M GMBH", 967L,
+                Collections.singletonList(new VehicleTypes(true, "Passenger Car")));
+
+        List<ManufacturerResponse> manufacturerDTOs = Arrays.asList(manufacturerDTO, manufacturerDTO2);
+        List<Manufacturer> manufacturers = Arrays.asList(manufacturer, manufacturer2);
+
+        Specification<Manufacturer> specs = Specification.where(CommonSpecifications.mfrNameLike("bmw"));
+
+        given(manufacturerRepository.findAll(specs)).willReturn(manufacturers);
+
+        assertThat(manufacturerService.searchManufacturers("bmw")).isEqualTo(manufacturerDTOs);
     }
 
     @Test

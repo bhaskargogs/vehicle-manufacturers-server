@@ -237,4 +237,37 @@ public class ManufacturersControllerTest {
                 .andExpect(content().string("[]"));
     }
 
+    @Test
+    public void searchManufacturers_ReturnsManufacturers() throws Exception {
+        ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW AG", 966L, null);
+        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(1L, "GERMANY", "BMW", "BMW M GMBH", 967L,
+                Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
+
+        List<ManufacturerResponse> manufacturers = Arrays.asList(manufacturerDTO, manufacturerDTO2);
+
+        given(manufacturerService.searchManufacturers(anyString())).willReturn(manufacturers);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("searchParam", "bmw"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].country").value("GERMANY"))
+                .andExpect(jsonPath("$[0].mfrName").value("BMW AG"))
+                .andExpect(jsonPath("$[1].country").value("GERMANY"))
+                .andExpect(jsonPath("$[1].mfrName").value("BMW M GMBH"));;
+    }
+
+    @Test
+    public void searchManufacturers_EmptyList() throws Exception {
+        given(manufacturerService.searchManufacturers(anyString())).willReturn(new ArrayList<>());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("searchParam", "bmw"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
+    }
+
 }

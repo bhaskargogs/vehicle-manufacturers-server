@@ -25,7 +25,9 @@ import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
+import org.server.manufacturers.util.CommonSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,5 +110,17 @@ public class ManufacturerService {
 
     private static Optional<Manufacturer> findManufacturerById(ManufacturerRepository repository, Long id) {
         return repository.findById(id);
+    }
+
+    public List<ManufacturerResponse> searchManufacturers(String searchParam) {
+        Specification<Manufacturer> specs = null;
+        if (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) {
+            specs = Specification.where(CommonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam)));
+        }
+        List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs);
+        return manufacturers.isEmpty() ? new ArrayList<>() :
+                manufacturers.stream()
+                        .map(ManufacturerResponse::mapManufacturerToResponse)
+                        .collect(Collectors.toList());
     }
 }
