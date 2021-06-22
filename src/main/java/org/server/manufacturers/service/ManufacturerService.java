@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.ManufacturerResponse;
-import org.server.manufacturers.dto.ManufacturersListResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.VehicleTypes;
@@ -28,10 +27,6 @@ import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
 import org.server.manufacturers.util.CommonSpecifications;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -111,26 +106,6 @@ public class ManufacturerService {
                 manufacturers.stream()
                         .map(ManufacturerResponse::mapManufacturerToResponse)
                         .collect(Collectors.toList());
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public ManufacturersListResponse findManufacturers(int pageNo, int pageSize, String direction, String fieldName) {
-        if (!direction.equalsIgnoreCase("asc") && !direction.equalsIgnoreCase("desc")) {
-            throw new InvalidConstraintException();
-        }
-        Pageable paging = PageRequest.of(pageNo, pageSize, (direction.equalsIgnoreCase("asc")) ? Sort.by(fieldName).ascending() : Sort.by(fieldName).descending());
-        Page<Manufacturer> manufacturers = manufacturerRepository.findAll(paging);
-        ManufacturersListResponse manufacturersListResponse = new ManufacturersListResponse();
-        if (manufacturers.hasContent()) {
-            manufacturersListResponse.setManufacturers(manufacturers.getContent().stream()
-                    .map(ManufacturerResponse::mapManufacturerToResponse)
-                    .collect(Collectors.toList()));
-            manufacturersListResponse.setTotalManufacturers(manufacturers.getTotalElements());
-        } else {
-            manufacturersListResponse.setManufacturers(new ArrayList<>());
-            manufacturersListResponse.setTotalManufacturers(null);
-        }
-        return manufacturersListResponse;
     }
 
     private static Optional<Manufacturer> findManufacturerById(ManufacturerRepository repository, Long id) {

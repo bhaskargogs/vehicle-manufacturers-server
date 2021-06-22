@@ -21,14 +21,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.server.manufacturers.dto.*;
+import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerResponse;
+import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
+import org.server.manufacturers.dto.VehicleTypesDTO;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.VehicleTypes;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
 import org.server.manufacturers.util.CommonSpecifications;
-import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -163,36 +165,6 @@ public class ManufacturerServiceTest {
         given(manufacturerRepository.findAll()).willReturn(new ArrayList<>());
 
         assertThat(manufacturerService.findAllManufacturers()).isEmpty();
-    }
-
-    @Test
-    public void findAllManufacturersPaging_ReturnsManufacturers() {
-        ManufacturerResponse manufacturerDTO1 = new ManufacturerResponse(1L,"Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
-        ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(2L,"United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
-        Manufacturer manufacturer1 = new Manufacturer(1L, "Japan", "toyota", "Toyota Motor Corporation", 1057L, new ArrayList<>());
-        Manufacturer manufacturer2 = new Manufacturer(2L, "United States (USA)", "Ford", "Ford Motors USA", 1095L, Collections.singletonList(new VehicleTypes(false, "Multipurpose Passenger Vehicle (MPV)")));
-
-        List<ManufacturerResponse> manufacturerDTOs = Arrays.asList(manufacturerDTO1, manufacturerDTO2);
-        List<Manufacturer> manufacturers = Arrays.asList(manufacturer1, manufacturer2);
-
-        Pageable pageable = PageRequest.of(0, 5, Sort.by("id").ascending());
-        Page<Manufacturer> manufacturersPage = new PageImpl<>(manufacturers);
-
-
-        given(manufacturerRepository.findAll(pageable)).willReturn(manufacturersPage);
-
-        assertThat(manufacturerService.findManufacturers(0, 5, "asc", "id"))
-                .isEqualTo(new ManufacturersListResponse(manufacturerDTOs, (long) manufacturers.size()));
-    }
-
-    @Test
-    public void findAllManufacturersPaging_EmptyList() {
-        Pageable pageable = PageRequest.of(0, 5, Sort.by("id").ascending());
-        Page<Manufacturer> manufacturersPage = new PageImpl<>(new ArrayList<>());
-        given(manufacturerRepository.findAll(pageable)).willReturn(manufacturersPage);
-
-        assertThat(manufacturerService.findManufacturers(0, 5, "asc", "id"))
-                .isEqualTo(new ManufacturersListResponse(new ArrayList<>(), null));
     }
 
 

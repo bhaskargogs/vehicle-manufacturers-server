@@ -18,7 +18,6 @@ package org.server.manufacturers.controller;
 
 import org.server.manufacturers.dto.ManufacturerDTO;
 import org.server.manufacturers.dto.ManufacturerResponse;
-import org.server.manufacturers.dto.ManufacturersListResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.service.ManufacturerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,19 +56,9 @@ public class ManufacturerController {
         manufacturerService.deleteManufacturer(id);
     }
 
-/*
     @GetMapping
     public List<ManufacturerResponse> findAllManufacturers() {
         return manufacturerService.findAllManufacturers();
-    }
-*/
-
-    @GetMapping
-    public ManufacturersListResponse findManufacturers(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
-                                                       @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
-                                                       @RequestParam(value = "direction", defaultValue = "asc") String direction,
-                                                       @RequestParam(value = "field", defaultValue = "id") String fieldName) {
-        return manufacturerService.findManufacturers(pageNo,pageSize,direction,fieldName);
     }
 
     @GetMapping("/search")
