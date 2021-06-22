@@ -118,11 +118,12 @@ public class ManufacturerService {
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
                 (searchParam.matches("^[0-9]$")) ?
                         Specification.where(commonSpecifications.mfrIdLike(searchParam)
-                                .or(commonSpecifications.idLike(searchParam))) :
-                        Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase()))
+//                                .or(commonSpecifications.idLike(searchParam))
+                        ) :
+                        Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
                                 .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
                                 .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
-                                .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase()));
+                                .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())));
 
         List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs);
 
