@@ -117,7 +117,7 @@ public class ManufacturerService {
         Specification<Manufacturer> specs = (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) ?
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
                 (searchParam.matches("^[0-9]$")) ?
-                        Specification.where(commonSpecifications.mfrIdLike(searchParam)
+                        Specification.where(commonSpecifications.mfrIdLike(Long.parseLong(searchParam))
 //                                .or(commonSpecifications.idLike(searchParam))
                         ) :
                         Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())

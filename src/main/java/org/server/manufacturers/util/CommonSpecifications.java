@@ -48,9 +48,9 @@ public class CommonSpecifications {
                 criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%");
     }
 
-    public Specification<Manufacturer> mfrIdLike(String mfrId) {
+    public Specification<Manufacturer> mfrIdLike(Long mfrId) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get(Manufacturer_.MFR_ID), "%" + mfrId + "%");
+                criteriaBuilder.equal(root.get(Manufacturer_.MFR_ID), mfrId);
     }
 
     public Specification<Manufacturer> isVehicleTypePrimary(boolean isPrimary) {
