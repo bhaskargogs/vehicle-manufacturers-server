@@ -114,7 +114,7 @@ public class ManufacturerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> searchManufacturers(String searchParam) {
-        Specification<Manufacturer> specs = Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam)));
+        Specification<Manufacturer> specs = Specification.where(commonSpecifications.hasVehicleTypeName(searchParam));
         /*
         Specification<Manufacturer> specs = (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) ?
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :

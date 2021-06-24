@@ -66,6 +66,9 @@ public class CommonSpecifications {
     public Specification<Manufacturer> hasVehicleTypeName(String name) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
+            if (vehicleTypesJoin != null) {
+                log.info("Search Function for join: " + vehicleTypesJoin.get("name"));
+            }
             return (vehicleTypesJoin == null) ? criteriaBuilder.conjunction() : criteriaBuilder.like(criteriaBuilder.lower(vehicleTypesJoin.get("name")), "%" + name + "%");
         };
     }
