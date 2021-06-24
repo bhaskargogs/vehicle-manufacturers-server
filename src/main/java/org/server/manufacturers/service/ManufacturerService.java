@@ -114,6 +114,8 @@ public class ManufacturerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> searchManufacturers(String searchParam) {
+        Specification<Manufacturer> specs = Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam)));
+        /*
         Specification<Manufacturer> specs = (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) ?
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
                 (searchParam.matches("^[0-9]$")) ?
@@ -124,7 +126,7 @@ public class ManufacturerService {
                                 .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
                                 .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
                                 .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())));
-
+*/
         List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs);
 
         return manufacturers.isEmpty() ? new ArrayList<>() :
