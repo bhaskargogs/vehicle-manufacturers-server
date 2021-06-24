@@ -115,8 +115,11 @@ public class ManufacturerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> searchManufacturers(String searchParam) {
-//        Specification<Manufacturer> specs = Specification.where(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase()));
-        Specification<Manufacturer> specs = Specification.where(commonSpecifications.nameBelongsToVehicleTypes(searchParam.toLowerCase()));
+        Specification<Manufacturer> specs = Specification.where(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase()))
+                .or(Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
+                        .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
+                        .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))));
+
 
 //        Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
 //                .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
