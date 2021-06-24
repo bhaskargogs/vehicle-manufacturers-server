@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.Manufacturer_;
 import org.server.manufacturers.entity.VehicleTypes;
+import org.server.manufacturers.entity.VehicleTypes_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -55,10 +56,14 @@ public class CommonSpecifications {
                 criteriaBuilder.equal(root.get(Manufacturer_.MFR_ID), mfrId);
     }
 
+    public Specification<Manufacturer> nameBelongsToVehicleTypes(String name) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.in(criteriaBuilder.lower(root.get(Manufacturer_.VEHICLE_TYPES).get(VehicleTypes_.NAME))).value("%"+name+"%");
+    }
+
     public Specification<Manufacturer> isVehicleTypePrimary(boolean isPrimary) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            log.info("Search Function for join: " + vehicleTypesJoin);
             return (vehicleTypesJoin == null) ? criteriaBuilder.conjunction() : criteriaBuilder.equal(vehicleTypesJoin.get("isPrimary"), isPrimary);
         };
     }

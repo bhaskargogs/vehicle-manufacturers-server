@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -114,10 +115,13 @@ public class ManufacturerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> searchManufacturers(String searchParam) {
-        Specification<Manufacturer> specs = Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
-                .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
-                .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
-                .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())));
+        Specification<Manufacturer> specs = Specification.where(commonSpecifications.nameBelongsToVehicleTypes(searchParam.toLowerCase()));
+
+//        Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
+//                .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
+//                .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
+//                .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())));
+//
         /*
         Specification<Manufacturer> specs = (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) ?
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
