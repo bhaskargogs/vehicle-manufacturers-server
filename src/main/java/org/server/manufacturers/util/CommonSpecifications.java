@@ -16,6 +16,7 @@
 
 package org.server.manufacturers.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.server.manufacturers.entity.Manufacturer;
 import org.server.manufacturers.entity.Manufacturer_;
 import org.server.manufacturers.entity.VehicleTypes;
@@ -26,6 +27,7 @@ import javax.persistence.criteria.Join;
 import java.util.List;
 
 @Component
+@Slf4j
 public class CommonSpecifications {
 
     public Specification<Manufacturer> idLike(String id) {
@@ -56,6 +58,7 @@ public class CommonSpecifications {
     public Specification<Manufacturer> isVehicleTypePrimary(boolean isPrimary) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
+            log.info("Search Function for join: " + vehicleTypesJoin);
             return (vehicleTypesJoin == null) ? criteriaBuilder.conjunction() : criteriaBuilder.equal(vehicleTypesJoin.get("isPrimary"), isPrimary);
         };
     }
