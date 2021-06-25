@@ -138,7 +138,8 @@ public class ManufacturerService {
                                 .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
                                 .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())));
 */
-        List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs);
+        List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs)
+                .stream().distinct().collect(Collectors.toList());
 
         return manufacturers.isEmpty() ? new ArrayList<>() :
                 manufacturers.stream()

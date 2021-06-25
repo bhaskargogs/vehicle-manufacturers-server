@@ -56,13 +56,6 @@ public class CommonSpecifications {
                 criteriaBuilder.equal(root.get(Manufacturer_.MFR_ID), mfrId);
     }
 
-    public Specification<Manufacturer> nameBelongsToVehicleTypes(String name) {
-        return (root, query, criteriaBuilder) -> {
-            Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return criteriaBuilder.in(criteriaBuilder.lower(vehicleTypesJoin.get("name"))).value("%" + name + "%");
-        };
-    }
-
     public Specification<Manufacturer> isVehicleTypePrimary(boolean isPrimary) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
