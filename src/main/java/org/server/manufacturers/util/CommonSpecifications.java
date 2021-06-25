@@ -31,9 +31,9 @@ import java.util.List;
 @Slf4j
 public class CommonSpecifications {
 
-    public Specification<Manufacturer> idLike(String id) {
+    public Specification<Manufacturer> idEqual(Long id) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get(Manufacturer_.ID), "%" + id + "%");
+                criteriaBuilder.equal(root.get(Manufacturer_.ID), id);
     }
 
     public Specification<Manufacturer> mfrNameLike(String mfrName) {
@@ -51,7 +51,7 @@ public class CommonSpecifications {
                 criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%");
     }
 
-    public Specification<Manufacturer> mfrIdLike(Long mfrId) {
+    public Specification<Manufacturer> mfrIdEqual(Long mfrId) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get(Manufacturer_.MFR_ID), mfrId);
     }
