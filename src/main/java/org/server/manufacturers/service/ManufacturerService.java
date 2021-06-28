@@ -115,6 +115,8 @@ public class ManufacturerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> searchManufacturers(String searchParam) {
+/*
+
         Specification<Manufacturer> specs;
 
         if (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) {
@@ -127,8 +129,8 @@ public class ManufacturerService {
                     .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
                     .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())));
         }
+*/
 
-        /*
         Specification<Manufacturer> specs = (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) ?
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
                 (searchParam.matches("\\d+")) ?
@@ -139,7 +141,6 @@ public class ManufacturerService {
                                 .or(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
                                 .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
                                 .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))));
-*/
 
         List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs)
                 .stream().distinct().collect(Collectors.toList());
