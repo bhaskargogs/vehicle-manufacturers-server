@@ -41,7 +41,7 @@ public class CommonSpecifications {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
             return (vehicleTypesJoin == null) ?
                     criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%") :
-                    criteriaBuilder.conjunction();
+                    criteriaBuilder.disjunction();
         };
     }
 
@@ -50,7 +50,7 @@ public class CommonSpecifications {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
             return (vehicleTypesJoin == null) ?
                     criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%") :
-                    criteriaBuilder.conjunction();
+                    criteriaBuilder.disjunction();
         };
     }
 
@@ -59,7 +59,7 @@ public class CommonSpecifications {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
             return (vehicleTypesJoin == null) ?
                     criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%") :
-                    criteriaBuilder.conjunction();
+                    criteriaBuilder.disjunction();
         };
     }
 
