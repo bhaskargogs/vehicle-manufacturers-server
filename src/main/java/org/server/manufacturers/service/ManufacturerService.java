@@ -115,9 +115,18 @@ public class ManufacturerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> searchManufacturers(String searchParam) {
-
         Specification<Manufacturer> specs;
+
+        // Condition to check whether List of Vehicle types exists
         boolean vehicleTypesExists = manufacturerRepository.findAll(Specification.where(commonSpecifications.vehicleTypeExists())).isEmpty();
+
+        /*
+        * Searching based on data types:
+        * 1. Check whether the search param is boolean and inside vehicle types
+        * 2. Check whether the search param is Long
+        * 3. Check whether the list of vehicle types is empty
+        * 4. Check within the list of vehicle types
+        */
         if (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) {
             specs = Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam)));
         } else if (searchParam.matches("\\d+")) {
@@ -129,18 +138,6 @@ public class ManufacturerService {
         } else {
             specs = Specification.where(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase()));
         }
-
-/*
-        Specification<Manufacturer> specs = (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) ?
-                Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
-                (searchParam.matches("\\d+")) ?
-                        Specification.where(commonSpecifications.mfrIdEqual(Long.parseLong(searchParam))
-                        ) :
-                        Specification.where(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())
-                                .or(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
-                                .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
-                                .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))));
-        */
 
         List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs)
                 .stream().distinct().collect(Collectors.toList());
