@@ -37,23 +37,30 @@ public class CommonSpecifications {
     }
 
     public Specification<Manufacturer> mfrNameLike(String mfrName) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%");
+        return (root, query, criteriaBuilder) -> {
+            Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
+            return (vehicleTypesJoin == null) ?
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%") :
+                    criteriaBuilder.conjunction();
+        };
     }
 
     public Specification<Manufacturer> mfrCountryLike(String mfrCountry) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%");
+        return (root, query, criteriaBuilder) -> {
+            Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
+            return (vehicleTypesJoin == null) ?
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%") :
+                    criteriaBuilder.conjunction();
+        };
     }
 
     public Specification<Manufacturer> mfrCommonNameLike(String mfrCommonName) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%");
-    }
-
-    public Specification<Manufacturer> mfrIdEqual(Long mfrId) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get(Manufacturer_.MFR_ID), mfrId);
+        return (root, query, criteriaBuilder) -> {
+            Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
+            return (vehicleTypesJoin == null) ?
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%") :
+                    criteriaBuilder.conjunction();
+        };
     }
 
     public Specification<Manufacturer> isVehicleTypePrimary(boolean isPrimary) {
@@ -66,7 +73,7 @@ public class CommonSpecifications {
     public Specification<Manufacturer> hasVehicleTypeName(String name) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return criteriaBuilder.like(criteriaBuilder.lower(vehicleTypesJoin.get("name")), "%" + name + "%");
+            return (vehicleTypesJoin == null) ? criteriaBuilder.conjunction() : criteriaBuilder.like(criteriaBuilder.lower(vehicleTypesJoin.get("name")), "%" + name + "%");
         };
     }
 
