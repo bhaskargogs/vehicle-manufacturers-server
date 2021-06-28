@@ -31,41 +31,30 @@ import java.util.List;
 @Slf4j
 public class CommonSpecifications {
 
-    public Specification<Manufacturer> idEqual(Long id) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get(Manufacturer_.ID), id);
-    }
-
     public Specification<Manufacturer> mfrNameLike(String mfrName) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return (vehicleTypesJoin == null) ?
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%") :
-                    criteriaBuilder.disjunction();
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%");
         };
     }
 
     public Specification<Manufacturer> mfrCountryLike(String mfrCountry) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return (vehicleTypesJoin == null) ?
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%") :
-                    criteriaBuilder.disjunction();
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%");
         };
     }
 
     public Specification<Manufacturer> mfrCommonNameLike(String mfrCommonName) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return (vehicleTypesJoin == null) ?
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%") :
-                    criteriaBuilder.disjunction();
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%");
         };
     }
 
     public Specification<Manufacturer> mfrIdEqual(Long mfrId) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get(Manufacturer_.mfrID), mfrId);
+                criteriaBuilder.equal(root.get(Manufacturer_.MFR_ID), mfrId);
     }
 
     public Specification<Manufacturer> isVehicleTypePrimary(boolean isPrimary) {
