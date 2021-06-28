@@ -122,10 +122,10 @@ public class ManufacturerService {
         } else if (searchParam.matches("\\d+")) {
             specs = Specification.where(commonSpecifications.mfrIdEqual(Long.parseLong(searchParam)));
         } else {
-            specs = Specification.where(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase()))
-                    .or(commonSpecifications.mfrCountryLike(searchParam.toLowerCase()))
+            specs = Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
                     .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
-                    .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()));
+                    .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()))
+                    .or(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())));
         }
 
         /*
