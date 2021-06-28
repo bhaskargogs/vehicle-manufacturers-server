@@ -123,9 +123,9 @@ public class ManufacturerService {
             specs = Specification.where(commonSpecifications.mfrIdEqual(Long.parseLong(searchParam)));
         } else {
             specs = Specification.where(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase()))
-                    .or(Specification.where(commonSpecifications.mfrCountryLike(searchParam.toLowerCase()))
-                                    .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
-                                    .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase())));
+                    .or(commonSpecifications.mfrCountryLike(searchParam.toLowerCase()))
+                    .or(commonSpecifications.mfrCommonNameLike(searchParam.toLowerCase()))
+                    .or(commonSpecifications.mfrNameLike(searchParam.toLowerCase()));
         }
 
         /*
