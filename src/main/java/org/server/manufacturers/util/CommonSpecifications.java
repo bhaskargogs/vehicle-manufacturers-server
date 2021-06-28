@@ -63,6 +63,11 @@ public class CommonSpecifications {
         };
     }
 
+    public Specification<Manufacturer> mfrIdEqual(Long mfrId) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get(Manufacturer_.mfrID), mfrId);
+    }
+
     public Specification<Manufacturer> isVehicleTypePrimary(boolean isPrimary) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");

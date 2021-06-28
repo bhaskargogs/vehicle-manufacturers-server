@@ -135,7 +135,6 @@ public class ManufacturerService {
                 Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam))) :
                 (searchParam.matches("\\d+")) ?
                         Specification.where(commonSpecifications.mfrIdEqual(Long.parseLong(searchParam))
-                                .or(commonSpecifications.idEqual(Long.parseLong(searchParam)))
                         ) :
                         Specification.where(commonSpecifications.hasVehicleTypeName(searchParam.toLowerCase())
                                 .or(commonSpecifications.mfrCountryLike(searchParam.toLowerCase())
