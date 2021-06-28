@@ -34,21 +34,28 @@ public class CommonSpecifications {
     public Specification<Manufacturer> mfrNameLike(String mfrName) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%");
+            return (vehicleTypesJoin == null) ?
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%") :
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_NAME)), "%" + mfrName + "%");
         };
     }
 
     public Specification<Manufacturer> mfrCountryLike(String mfrCountry) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%");
+            return (vehicleTypesJoin == null) ?
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%") :
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COUNTRY)), "%" + mfrCountry + "%");
+
         };
     }
 
     public Specification<Manufacturer> mfrCommonNameLike(String mfrCommonName) {
         return (root, query, criteriaBuilder) -> {
             Join<Manufacturer, List<VehicleTypes>> vehicleTypesJoin = root.join("vehicleTypes");
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%");
+            return (vehicleTypesJoin == null) ?
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%") :
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Manufacturer_.MFR_COMMON_NAME)), "%" + mfrCommonName + "%");
         };
     }
 
