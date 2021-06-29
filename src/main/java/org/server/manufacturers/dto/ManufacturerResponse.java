@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.server.manufacturers.entity.Manufacturer;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +44,7 @@ public class ManufacturerResponse {
         manufacturerResponse.setMfrId(manufacturer.getMfrID());
         manufacturerResponse.setMfrName(manufacturer.getMfrName());
         List<VehicleTypesDTO> vehicleTypesDTOS = (manufacturer.getVehicleTypes().isEmpty()) ?
-                new ArrayList<>() :
+                Collections.emptyList() :
                 (manufacturer.getVehicleTypes().stream().map(vehicleType -> {
                     VehicleTypesDTO vehicleTypesDTO = new VehicleTypesDTO();
                     vehicleTypesDTO.setIsPrimary(vehicleType.isPrimary());

@@ -17,6 +17,7 @@
 package org.server.manufacturers.controller;
 
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerListResponse;
 import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.service.ManufacturerService;
@@ -57,8 +58,11 @@ public class ManufacturerController {
     }
 
     @GetMapping
-    public List<ManufacturerResponse> findAllManufacturers() {
-        return manufacturerService.findAllManufacturers();
+    public ManufacturerListResponse findAllManufacturers(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
+                                                         @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+                                                         @RequestParam(value = "direction", defaultValue = "asc") String direction,
+                                                         @RequestParam(value = "field", defaultValue = "id") String field) {
+        return manufacturerService.findAllManufacturers(pageNo, pageSize, direction, field);
     }
 
     @GetMapping("/search")

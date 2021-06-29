@@ -19,10 +19,7 @@ package org.server.manufacturers.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.server.manufacturers.dto.ManufacturerDTO;
-import org.server.manufacturers.dto.ManufacturerResponse;
-import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
-import org.server.manufacturers.dto.VehicleTypesDTO;
+import org.server.manufacturers.dto.*;
 import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.service.ManufacturerService;
@@ -34,7 +31,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -206,34 +202,49 @@ public class ManufacturersControllerTest {
     }
 
     @Test
-    public void findAllManufacturers_ListsManufacturers() throws Exception {
+    public void findAllManufacturersPaging_ManufacturersListWithTotal() throws Exception {
         ManufacturerResponse manufacturerDTO = new ManufacturerResponse(1L, "Japan", "Mazda", "Mazda Motor Corporation", 1041L,
                 Collections.singletonList(new VehicleTypesDTO(true, "Passenger Car")));
         ManufacturerResponse manufacturerDTO2 = new ManufacturerResponse(2L, "United States (USA)", "Ford", "Ford Motor Corporation", 1095L,
                 Collections.singletonList(new VehicleTypesDTO(false, "Multipurpose Passenger Vehicle (MPV)")));
         List<ManufacturerResponse> manufacturers = Arrays.asList(manufacturerDTO, manufacturerDTO2);
+        ManufacturerListResponse manufacturerListResponse = new ManufacturerListResponse(manufacturers, (long) manufacturers.size());
 
-        given(manufacturerService.findAllManufacturers()).willReturn(manufacturers);
+
+        given(manufacturerService.findAllManufacturers(0, 20, "asc", "id")).willReturn(manufacturerListResponse);
+
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers")
+                .param("pageNo", "0")
+                .param("pageSize", "20")
+                .param("direction", "asc")
+                .param("field", "id")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].country").value("Japan"))
-                .andExpect(jsonPath("$[0].mfrCommonName").value("Mazda"))
-                .andExpect(jsonPath("$[1].country").value("United States (USA)"))
-                .andExpect(jsonPath("$[1].mfrCommonName").value("Ford"));
+                .andExpect(jsonPath("manufacturersList").isArray())
+                .andExpect(jsonPath("$.manufacturersList[0].country").value("Japan"))
+                .andExpect(jsonPath("$.manufacturersList[0].mfrCommonName").value("Mazda"))
+                .andExpect(jsonPath("$.manufacturersList[1].country").value("United States (USA)"))
+                .andExpect(jsonPath("$.manufacturersList[1].mfrCommonName").value("Ford"))
+                .andExpect(jsonPath("totalManufacturers").value(2));
     }
 
     @Test
-    public void findAllManufacturers_EmptyList() throws Exception {
-        given(manufacturerService.findAllManufacturers()).willReturn(new ArrayList<>());
+    public void findAllManufacturersPaging_EmptyList() throws Exception {
+        given(manufacturerService.findAllManufacturers(0, 20, "asc", "id"))
+                .willReturn(new ManufacturerListResponse(Collections.emptyList(), 0L));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers")
+                .param("pageNo", "0")
+                .param("pageSize", "20")
+                .param("direction", "asc")
+                .param("field", "id")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("[]"));
+                .andExpect(jsonPath("manufacturersList").isEmpty())
+                .andExpect(jsonPath("totalManufacturers").value(0));
     }
 
     @Test
@@ -259,7 +270,7 @@ public class ManufacturersControllerTest {
 
     @Test
     public void searchManufacturers_EmptyList() throws Exception {
-        given(manufacturerService.searchManufacturers(anyString())).willReturn(new ArrayList<>());
+        given(manufacturerService.searchManufacturers(anyString())).willReturn(Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/search")
                 .contentType(MediaType.APPLICATION_JSON)

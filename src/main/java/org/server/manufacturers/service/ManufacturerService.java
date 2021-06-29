@@ -19,6 +19,7 @@ package org.server.manufacturers.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerListResponse;
 import org.server.manufacturers.dto.ManufacturerResponse;
 import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.entity.Manufacturer;
@@ -27,15 +28,18 @@ import org.server.manufacturers.exception.InvalidConstraintException;
 import org.server.manufacturers.exception.NotFoundException;
 import org.server.manufacturers.repository.ManufacturerRepository;
 import org.server.manufacturers.util.CommonSpecifications;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -56,6 +60,10 @@ public class ManufacturerService {
     @Transactional(propagation = Propagation.REQUIRED)
     public String create(List<ManufacturerDTO> manufacturerDTOS) {
         try {
+            /*
+             * Iterating over List of Manufacturer DTOs and saving
+             * each Manufacturer with new Created and Updated Date
+             * */
             manufacturerDTOS.forEach(manufacturerDTO -> {
                 Manufacturer newManufacturer = new Manufacturer(manufacturerDTO.getCountry(), manufacturerDTO.getMfrCommonName(),
                         manufacturerDTO.getMfrName(), manufacturerDTO.getMfrId(), manufacturerDTO.getVehicleTypes().stream()
@@ -79,11 +87,17 @@ public class ManufacturerService {
             if (foundManufacturer.isEmpty()) {
                 throw new NotFoundException();
             }
+
+            /*
+             * Updating each updated Manufacturer DTO if manufacturer exists
+             * and setting new updated date in DB
+             * */
             Manufacturer manufacturerToUpdate = new Manufacturer(id, updateManufacturerDTORequest.getCountry(), updateManufacturerDTORequest.getMfrCommonName(),
                     updateManufacturerDTORequest.getMfrName(), updateManufacturerDTORequest.getMfrId(), updateManufacturerDTORequest.getVehicleTypes().stream()
                     .map(vehicleTypesDTO -> new VehicleTypes(vehicleTypesDTO.isIsPrimary(), vehicleTypesDTO.getName())).collect(Collectors.toList()));
             manufacturerToUpdate.setCreatedDate(foundManufacturer.get().getCreatedDate());
             manufacturerToUpdate.setUpdatedDate(OffsetDateTime.now());
+
             manufacturerRepository.save(manufacturerToUpdate);
         } catch (InvalidConstraintException ex) {
             log.info("Manufacture Service: updateManufacturer(): " + ex.getMessage());
@@ -103,10 +117,30 @@ public class ManufacturerService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<ManufacturerResponse> findAllManufacturers() {
         List<Manufacturer> manufacturers = manufacturerRepository.findAll();
-        return manufacturers.isEmpty() ? new ArrayList<>() :
+        return manufacturers.isEmpty() ? Collections.emptyList() :
                 manufacturers.stream()
                         .map(ManufacturerResponse::mapManufacturerToResponse)
                         .collect(Collectors.toList());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ManufacturerListResponse findAllManufacturers(int pageNo, int pageSize, String direction, String fieldName) {
+        if (!direction.equalsIgnoreCase("asc") && !direction.equalsIgnoreCase("desc")) {
+            throw new InvalidConstraintException();
+        }
+        Pageable pageable = PageRequest.of(pageNo, pageSize, (direction.equals("asc")) ? Sort.by(fieldName).ascending() : Sort.by(fieldName).descending());
+        Page<Manufacturer> manufacturers = manufacturerRepository.findAll(pageable);
+        ManufacturerListResponse manufacturerListResponse = new ManufacturerListResponse();
+        if (manufacturers.hasContent()) {
+            manufacturerListResponse.setManufacturersList(manufacturers.getContent().stream()
+                    .map(ManufacturerResponse::mapManufacturerToResponse)
+                    .collect(Collectors.toList()));
+            manufacturerListResponse.setTotalManufacturers(manufacturers.getTotalElements());
+        } else {
+            manufacturerListResponse.setManufacturersList(Collections.emptyList());
+            manufacturerListResponse.setTotalManufacturers((long) Collections.emptyList().size());
+        }
+        return manufacturerListResponse;
     }
 
     private static Optional<Manufacturer> findManufacturerById(ManufacturerRepository repository, Long id) {
@@ -121,12 +155,12 @@ public class ManufacturerService {
         boolean vehicleTypesExists = manufacturerRepository.findAll(Specification.where(commonSpecifications.vehicleTypeExists())).isEmpty();
 
         /*
-        * Searching based on data types:
-        * 1. Check whether the search param is boolean and inside vehicle types
-        * 2. Check whether the search param is Long
-        * 3. Check whether the list of vehicle types is empty
-        * 4. Check within the list of vehicle types
-        */
+         * Searching based on data types:
+         * 1. Check whether the search param is boolean and inside vehicle types
+         * 2. Check whether the search param is Long
+         * 3. Check whether the list of vehicle types is empty
+         * 4. Check within the list of vehicle types
+         */
         if (searchParam.equalsIgnoreCase("true") || searchParam.equalsIgnoreCase("false")) {
             specs = Specification.where(commonSpecifications.isVehicleTypePrimary(Boolean.parseBoolean(searchParam)));
         } else if (searchParam.matches("\\d+")) {
@@ -142,7 +176,7 @@ public class ManufacturerService {
         List<Manufacturer> manufacturers = manufacturerRepository.findAll(specs)
                 .stream().distinct().collect(Collectors.toList());
 
-        return manufacturers.isEmpty() ? new ArrayList<>() :
+        return manufacturers.isEmpty() ? Collections.emptyList() :
                 manufacturers.stream()
                         .map(ManufacturerResponse::mapManufacturerToResponse)
                         .collect(Collectors.toList());
