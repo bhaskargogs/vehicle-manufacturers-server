@@ -15,6 +15,7 @@
  */
 
 plugins {
+    id "se.thinkcode.cucumber-runner" version "0.0.8"
     id 'org.springframework.boot' version '2.5.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
@@ -27,6 +28,9 @@ sourceCompatibility = '11'
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
+    }
+    cucumberRuntime {
+        extendsFrom testImplementation
     }
 }
 
@@ -49,6 +53,8 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.testcontainers:postgresql:1.15.0'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.hamcrest:hamcrest-library:2.2'
     testImplementation 'com.konghq:unirest-java:3.8.00'
     testImplementation 'io.cucumber:cucumber-java:6.1.2'
@@ -70,10 +76,10 @@ test {
     exclude 'org/server/manufacturers/cucumber'
 }
 
-//cucumber {
-//    glue = 'classpath:org.server.manufacturers.cucumber'
-//    //dryRun = 'false'
-//    plugin = ['pretty']
-//    featurePath = 'classpath:features'
-//    main = 'io.cucumber.core.cli.Main'
-//}
+cucumber {
+    glue = 'classpath:org.server.manufacturers.cucumber'
+    //dryRun = 'false'
+    plugin = ['pretty']
+    featurePath = 'classpath:features'
+    main = 'io.cucumber.core.cli.Main'
+}
