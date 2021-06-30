@@ -25,14 +25,9 @@ import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
-public class VehicleType {
+public class VehicleTypeEntity {
     private boolean isPrimary;
     private String name;
-
-    public VehicleType(boolean isPrimary, String name) {
-        this.isPrimary = isPrimary;
-        this.name = name;
-    }
 
     public static List<Boolean> vehicleTypeIsPrimaryList(String isPrimaries) {
         return Arrays.stream(isPrimaries.split(",")).map(Boolean::parseBoolean).collect(Collectors.toList());

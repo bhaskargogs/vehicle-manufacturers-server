@@ -17,6 +17,8 @@
 package org.server.manufacturers.cucumber.dto;
 
 import lombok.Data;
+import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.VehicleTypesDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +27,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Data
-public class ManufacturerDTO {
+public class ManufacturerEntity {
 
     private String country;
     private String mfrCommonName;
     private String mfrName;
     private Long mfrId;
-    private List<VehicleType> vehicleTypeList;
+    private List<VehicleTypeEntity> vehicleTypeList;
 
     public static ManufacturerDTO createManufacturerDTO(Map<String, String> entry) {
         ManufacturerDTO manufacturerDTO = new ManufacturerDTO();
@@ -39,17 +41,17 @@ public class ManufacturerDTO {
         manufacturerDTO.setMfrCommonName(entry.get("mfrCommonName"));
         manufacturerDTO.setMfrName(entry.get("mfrName"));
         manufacturerDTO.setMfrId(Long.parseLong(entry.get("mfrId")));
-        List<Boolean> isPrimaries = VehicleType.vehicleTypeIsPrimaryList(entry.get("isPrimary"));
-        List<String> names = VehicleType.vehicleTypeNameList(entry.get("name"));
-        List<VehicleType> vehicleTypes = new ArrayList<>();
+        List<Boolean> isPrimaries = VehicleTypeEntity.vehicleTypeIsPrimaryList(entry.get("isPrimary"));
+        List<String> names = VehicleTypeEntity.vehicleTypeNameList(entry.get("name"));
+        List<VehicleTypesDTO> vehicleTypes = new ArrayList<>();
         Map<String, Boolean> vehicleTypesMap = IntStream.range(0, isPrimaries.size()).boxed()
                 .collect(Collectors.toMap(names::get, isPrimaries::get));
 
         vehicleTypesMap.forEach((key, value) -> {
-            VehicleType vehicleType = new VehicleType(value, key);
+            VehicleTypesDTO vehicleType = new VehicleTypesDTO(value, key);
             vehicleTypes.add(vehicleType);
         });
-        manufacturerDTO.setVehicleTypeList(vehicleTypes);
+        manufacturerDTO.setVehicleTypes(vehicleTypes);
         return manufacturerDTO;
     }
 

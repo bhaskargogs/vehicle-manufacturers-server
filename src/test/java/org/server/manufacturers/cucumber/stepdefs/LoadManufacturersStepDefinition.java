@@ -18,18 +18,37 @@ package org.server.manufacturers.cucumber.stepdefs;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
-import org.server.manufacturers.cucumber.dto.ManufacturerDTO;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import kong.unirest.HttpResponse;
+import org.server.manufacturers.cucumber.dto.ManufacturerEntity;
+import org.server.manufacturers.cucumber.operations.ManufacturerOperations;
+import org.server.manufacturers.dto.ManufacturerDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class LoadManufacturersStepDefinition {
 
     List<ManufacturerDTO> manufacturersList;
+    protected ManufacturerOperations manufacturerOperations = new ManufacturerOperations();
+    HttpResponse<String> response;
 
-    @Given("a manufacturer list")
+    @Given("a manufacturers list")
     public void aManufacturerList(DataTable table) {
         manufacturersList = table.asMaps().stream().
-                map(ManufacturerDTO::createManufacturerDTO).collect(Collectors.toList());
+                map(ManufacturerEntity::createManufacturerDTO).collect(Collectors.toList());
+    }
+
+    @When("a user loads the manufacturers list")
+    public void aUserLoadsTheManufacturersList() {
+        response = manufacturerOperations.createOrLoadManufacturers(manufacturersList);
+    }
+
+    @Then("the user receives a {string} response")
+    public void theUserReceivesAResponse(String expected) {
+        assertThat(expected).isEqualTo(response.getBody());
     }
 }

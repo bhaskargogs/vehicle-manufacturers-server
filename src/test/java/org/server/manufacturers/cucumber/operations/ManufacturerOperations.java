@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package org.server.manufacturers.cucumber.dto;
+package org.server.manufacturers.cucumber.operations;
 
-import lombok.Getter;
+import kong.unirest.HttpResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.server.manufacturers.cucumber.client.ManufacturerClient;
+import org.server.manufacturers.dto.ManufacturerDTO;
 
-public class UpdateManufacturerDTO extends ManufacturerEntity {
+import java.util.List;
 
-    @Getter
-    private Long id;
+@Slf4j
+public class ManufacturerOperations {
+
+    public HttpResponse<String> createOrLoadManufacturers(List<ManufacturerDTO> creationDTO) {
+        return ManufacturerClient.createManufacturer(creationDTO);
+    }
 }
