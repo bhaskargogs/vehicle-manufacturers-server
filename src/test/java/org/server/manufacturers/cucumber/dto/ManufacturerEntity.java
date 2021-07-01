@@ -18,6 +18,8 @@ package org.server.manufacturers.cucumber.dto;
 
 import lombok.Data;
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerResponse;
+import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 import org.server.manufacturers.dto.VehicleTypesDTO;
 
 import java.util.ArrayList;
@@ -53,6 +55,48 @@ public class ManufacturerEntity {
         });
         manufacturerDTO.setVehicleTypes(vehicleTypes);
         return manufacturerDTO;
+    }
+
+    public static ManufacturerResponse createManufacturerResponse(Map<String, String> entry) {
+        ManufacturerResponse manufacturerResponse = new ManufacturerResponse();
+        manufacturerResponse.setId(Long.parseLong(entry.get("id")));
+        manufacturerResponse.setCountry(entry.get("country"));
+        manufacturerResponse.setMfrCommonName(entry.get("mfrCommonName"));
+        manufacturerResponse.setMfrName(entry.get("mfrName"));
+        manufacturerResponse.setMfrId(Long.parseLong(entry.get("mfrId")));
+        List<Boolean> isPrimaries = VehicleTypeEntity.vehicleTypeIsPrimaryList(entry.get("isPrimary"));
+        List<String> names = VehicleTypeEntity.vehicleTypeNameList(entry.get("name"));
+        List<VehicleTypesDTO> vehicleTypes = new ArrayList<>();
+        Map<String, Boolean> vehicleTypesMap = IntStream.range(0, isPrimaries.size()).boxed()
+                .collect(Collectors.toMap(names::get, isPrimaries::get));
+
+        vehicleTypesMap.forEach((key, value) -> {
+            VehicleTypesDTO vehicleType = new VehicleTypesDTO(value, key);
+            vehicleTypes.add(vehicleType);
+        });
+        manufacturerResponse.setVehicleTypes(vehicleTypes);
+        return manufacturerResponse;
+    }
+
+    public static UpdateManufacturerDTORequest createUpdateManufacturerDTO(Map<String, String> entry) {
+        UpdateManufacturerDTORequest updatedDTO = new UpdateManufacturerDTORequest();
+        updatedDTO.setId(Long.parseLong(entry.get("id")));
+        updatedDTO.setCountry(entry.get("country"));
+        updatedDTO.setMfrCommonName(entry.get("mfrCommonName"));
+        updatedDTO.setMfrName(entry.get("mfrName"));
+        updatedDTO.setMfrId(Long.parseLong(entry.get("mfrId")));
+        List<Boolean> isPrimaries = VehicleTypeEntity.vehicleTypeIsPrimaryList(entry.get("isPrimary"));
+        List<String> names = VehicleTypeEntity.vehicleTypeNameList(entry.get("name"));
+        List<VehicleTypesDTO> vehicleTypes = new ArrayList<>();
+        Map<String, Boolean> vehicleTypesMap = IntStream.range(0, isPrimaries.size()).boxed()
+                .collect(Collectors.toMap(names::get, isPrimaries::get));
+
+        vehicleTypesMap.forEach((key, value) -> {
+            VehicleTypesDTO vehicleType = new VehicleTypesDTO(value, key);
+            vehicleTypes.add(vehicleType);
+        });
+        updatedDTO.setVehicleTypes(vehicleTypes);
+        return updatedDTO;
     }
 
 }

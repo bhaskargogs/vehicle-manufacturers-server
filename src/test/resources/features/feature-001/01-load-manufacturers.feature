@@ -7,4 +7,3 @@ Feature: Load Manufacturers
       | United States (USA) | Optima        | 1044  | Optima Bus Corp         | true, false, false | Bus, Truck, Multipurpose Passenger Vehicle (MPV)    |
     When a user loads the manufacturers list
     Then the user receives a "Successfully Loaded Manufacturers" response
-

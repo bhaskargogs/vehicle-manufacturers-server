@@ -16,6 +16,7 @@
 
 package org.server.manufacturers.cucumber.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -40,16 +41,17 @@ public abstract class ManufacturerClient {
     public static HttpResponse<String> createManufacturer(List<ManufacturerDTO> manufacturerDTOS) {
         HttpResponse<String> response;
 
+        log.info(String.format("ManufacturerClient.createManufacturer(): [%s]", manufacturerDTOS.toString()));
         try {
             response = Unirest.post(URL)
                     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                    .body(manufacturerDTOS)
+                    .body(new ObjectMapper().writeValueAsString(manufacturerDTOS))
                     .asString();
 
             log.info(String.format("ManufacturerClient.createManufacturer(): [%s]", response.getBody()));
 
-        } catch (InvalidConstraintException ex) {
+        } catch (InvalidConstraintException | JsonProcessingException ex) {
             throw new InvalidConstraintException();
         }
         return response;
@@ -82,18 +84,18 @@ public abstract class ManufacturerClient {
         return responseDTO;
     }
 
-    public static HttpResponse<String> updateManufacturer(UpdateManufacturerDTORequest updateRequest) {
+    public static HttpResponse<String> updateManufacturer(Long id, UpdateManufacturerDTORequest updateRequest) {
         HttpResponse<String> response;
         try {
-            response = Unirest.put(URL + updateRequest.getId())
+            response = Unirest.put(URL + id)
                     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                    .body(updateRequest)
+                    .body(new ObjectMapper().writeValueAsString(updateRequest))
                     .asString();
 
             log.info(String.format("ManufacturerClient.updateManufacturer(): [%s]", response.getBody()));
 
-        } catch (NotFoundException ex) {
+        } catch (NotFoundException | JsonProcessingException ex) {
             throw new NotFoundException();
         }
 

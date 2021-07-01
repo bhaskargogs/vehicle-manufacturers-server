@@ -16,11 +16,18 @@
 
 package org.server.manufacturers.cucumber.operations;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.server.manufacturers.cucumber.client.ManufacturerClient;
 import org.server.manufacturers.dto.ManufacturerDTO;
+import org.server.manufacturers.dto.ManufacturerListResponse;
+import org.server.manufacturers.dto.ManufacturerResponse;
+import org.server.manufacturers.dto.UpdateManufacturerDTORequest;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -28,5 +35,25 @@ public class ManufacturerOperations {
 
     public HttpResponse<String> createOrLoadManufacturers(List<ManufacturerDTO> creationDTO) {
         return ManufacturerClient.createManufacturer(creationDTO);
+    }
+
+    public ManufacturerResponse findManufacturer(Long id) throws IOException {
+        return new ObjectMapper().readValue(ManufacturerClient.findManufacturerById(id).getBody().getObject().toString(), ManufacturerResponse.class);
+    }
+
+    public HttpResponse<String> updateManufacturer(Long id, UpdateManufacturerDTORequest updateRequest) {
+        return ManufacturerClient.updateManufacturer(id, updateRequest);
+    }
+
+    public void deleteManufacturer(Long id) {
+        HttpResponse<?> response = ManufacturerClient.deleteManufacturer(id);
+    }
+
+    public ManufacturerListResponse findAllManufacturers(int pageNo, int pageSize, String direction, String fieldName) throws IOException {
+        return ManufacturerClient.listManufacturers(pageNo, pageSize, direction, fieldName);
+    }
+
+    public List<ManufacturerResponse> searchManufacturers(String searchParam) throws JsonProcessingException {
+        return new ObjectMapper().readValue(ManufacturerClient.searchManufacturers(searchParam).getBody().getArray().toString(), new TypeReference<List<ManufacturerResponse>>(){});
     }
 }
